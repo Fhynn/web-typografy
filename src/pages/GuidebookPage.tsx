@@ -116,9 +116,6 @@ export default function GuidebookPage() {
     return () => ctx.revert()
   }, [])
 
-  /* Switch preview image on active guide change — tiny GSAP cross-fade */
-  const activeImgSrc = GUIDES[activeGuide].photo
-
   return (
     <div ref={pageRef} className="min-h-screen bg-[#060606] text-[#F0EDE8]" style={{ fontFamily: "'Inter', sans-serif" }}>
 
