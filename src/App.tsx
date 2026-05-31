@@ -272,7 +272,7 @@ export default function App() {
             className="text-[10px] sm:text-[11px] font-medium tracking-[0.14em] text-white/70"
             style={{ fontFamily: "'Barlow', sans-serif" }}
           >
-            SECURE BY DESIGN. ZERO DATA LEAKS.
+            SECURE BY DESIGN. ALFHIN HIDAYAT.
           </span>
         </div>
       </div>
