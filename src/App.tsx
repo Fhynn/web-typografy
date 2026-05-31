@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { Lock, Menu, X } from 'lucide-react'
+import SplitText from './components/SplitText'
+import MagneticButton from './components/MagneticButton'
 import './index.css'
 
 /* ─────────────────────────────────────────────────── */
@@ -11,11 +13,13 @@ const VIDEO_SRC =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260510_060007_60275ce7-030c-4668-a160-8f364ec537d3.mp4'
 
 const NAV_LINKS = [
-  { label: 'JOURNEY',   path: '/journey'   },
-  { label: 'BENEFITS',  path: '/benefits'  },
-  { label: 'JOURNAL',   path: '/journal'   },
-  { label: 'GUIDEBOOK', path: '/guidebook' },
+  { label: 'JOURNEY',   path: '/journey'  },
+  { label: 'JOURNAL',   path: '/journal'  },
+  { label: 'GUIDEBOOK', path: '/guidebook'},
+  { label: 'ABOUT',     path: '/about'    },
 ] as const
+
+
 
 /* ─────────────────────────────────────────────────── */
 /*  App                                                */
@@ -200,14 +204,10 @@ export default function App() {
       {/*  HERO HEADLINE  (z-20)                    */}
       {/* ══════════════════════════════════════════ */}
       <div
-        className={`fixed inset-x-0 z-20 flex flex-col items-center text-center px-6 transition-all duration-1000 ${
-          heroVisible
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-6'
-        }`}
+        className="fixed inset-x-0 z-20 flex flex-col items-center text-center px-6"
         style={{ top: 'clamp(90px, 14vh, 140px)' }}
       >
-        <h1
+        <div
           style={{
             fontFamily: "'Inter', sans-serif",
             fontWeight: 400,
@@ -216,11 +216,17 @@ export default function App() {
             letterSpacing: '-0.02em',
           }}
         >
-          <span className="block text-white">Venture without edges.</span>
-          <span className="block" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Uncover with keen instinct.
-          </span>
-        </h1>
+          {heroVisible && (
+            <SplitText trigger={false} delay={0} duration={1.2} className="block text-white">
+              Venture without edges.
+            </SplitText>
+          )}
+          {heroVisible && (
+            <SplitText trigger={false} delay={0.2} duration={1.2} className="block" style={{ color: 'rgba(255,255,255,0.55)' }}>
+              Uncover with keen instinct.
+            </SplitText>
+          )}
+        </div>
       </div>
 
       {/* ══════════════════════════════════════════ */}
@@ -249,9 +255,8 @@ export default function App() {
         </p>
 
         {/* CTA button */}
-        <Link
+        <MagneticButton
           to="/journey"
-          id="plan-escape-btn"
           className="
             bg-white text-black text-[13px] sm:text-[15px] font-medium rounded-full
             px-6 py-3 sm:px-8 sm:py-3.5
@@ -263,7 +268,7 @@ export default function App() {
           style={{ fontFamily: "'Barlow', sans-serif" }}
         >
           Plan my escape today
-        </Link>
+        </MagneticButton>
 
         {/* Trust badge */}
         <div className="flex items-center gap-2">
@@ -275,6 +280,19 @@ export default function App() {
             SECURE BY DESIGN. ALFHIN HIDAYAT.
           </span>
         </div>
+      </div>
+      {/* Creator Credits */}
+      <div className={`fixed bottom-6 right-6 sm:bottom-8 sm:right-10 z-50 flex flex-col sm:flex-row items-end sm:items-center gap-3 sm:gap-6 transition-all duration-1000 delay-[600ms] ${
+          bottomVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        }`}>
+        <a href="https://instagram.com/fhinz_anxiety" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white/50 hover:text-white transition-colors duration-300">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          <span className="text-[10px] tracking-[0.1em] font-medium" style={{ fontFamily: "'Barlow', sans-serif" }}>@fhinz_anxiety</span>
+        </a>
+        <a href="https://github.com/Fhynn" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white/50 hover:text-white transition-colors duration-300">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          <span className="text-[10px] tracking-[0.1em] font-medium" style={{ fontFamily: "'Barlow', sans-serif" }}>Fhynn</span>
+        </a>
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
+import SplitText from '../components/SplitText'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -147,28 +148,27 @@ export default function JournalPage() {
   const rest      = POSTS.slice(1)
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-[#060606] text-[#F0EDE8]" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div ref={pageRef} className="min-h-screen" style={{ fontFamily: "'Inter', sans-serif", background: '#FCE883', color: '#1A1400' }}>
 
       {/* Nav */}
-      <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 sm:px-12 py-6">
-        <Link to="/" className="flex items-center gap-2.5 group" style={{ color: 'rgba(240,237,232,0.45)' }}>
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] sm:w-[85%] max-w-7xl z-50 flex items-center justify-between px-6 py-4 rounded-full liquid-glass transition-all duration-300">
+        <Link to="/" className="flex items-center gap-2.5 group" style={{ color: 'rgba(26,20,0,0.55)' }}>
           <ArrowLeft size={14} strokeWidth={2} className="group-hover:-translate-x-1 transition-transform duration-300" />
           <span className="text-[10px] tracking-[0.18em] font-medium">WANDERFUL</span>
         </Link>
-        <span className="text-[10px] tracking-[0.18em] font-medium" style={{ color: 'rgba(240,237,232,0.25)' }}>JOURNAL</span>
+        <span className="text-[10px] tracking-[0.18em] font-medium" style={{ color: 'rgba(26,20,0,0.35)' }}>JOURNAL</span>
       </nav>
 
       {/* ── Header ─────────────────────────────────────── */}
       <header ref={headerRef} className="pt-32 sm:pt-40 pb-12 px-6 sm:px-12 max-w-7xl mx-auto">
-        <p data-h className="text-[10px] tracking-[0.22em] font-medium mb-7" style={{ color: 'rgba(240,237,232,0.3)' }}>
+        <p data-h className="text-[10px] tracking-[0.22em] font-medium mb-7" style={{ color: 'rgba(26,20,0,0.4)' }}>
           03 — JOURNAL
         </p>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-          <h1 data-h className="font-light leading-[0.95] tracking-[-0.035em]" style={{ fontSize: 'clamp(42px, 6vw, 88px)' }}>
-            <span className="block">Stories from</span>
-            <span className="block" style={{ color: 'rgba(240,237,232,0.28)' }}>the edge of the map.</span>
-          </h1>
-          <p data-h className="text-[13px] leading-relaxed max-w-[260px] sm:text-right pb-2" style={{ color: 'rgba(240,237,232,0.35)' }}>
+          <SplitText data-h className="font-light leading-[0.95] tracking-[-0.035em]" style={{ fontSize: 'clamp(42px, 6vw, 88px)' }} trigger={false} delay={0.1}>
+            Stories from the edge of the map.
+          </SplitText>
+          <p data-h className="text-[13px] leading-relaxed max-w-[260px] sm:text-right pb-2" style={{ color: 'rgba(26,20,0,0.45)' }}>
             Essays, stories, and candid interviews about what travel actually feels like.
           </p>
         </div>
@@ -241,9 +241,9 @@ export default function JournalPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t px-6 sm:px-12 py-10 flex items-center justify-between" style={{ borderColor: 'rgba(240,237,232,0.07)' }}>
-        <p className="text-[13px]" style={{ color: 'rgba(240,237,232,0.3)' }}>New stories every month.</p>
-        <Link to="/guidebook" className="flex items-center gap-2 text-[11px] font-medium tracking-[0.1em] hover:gap-3 transition-all duration-300" style={{ color: 'rgba(240,237,232,0.6)' }}>
+      <footer className="border-t px-6 sm:px-12 py-10 flex items-center justify-between" style={{ borderColor: 'rgba(26,20,0,0.15)' }}>
+        <p className="text-[13px]" style={{ color: 'rgba(26,20,0,0.4)' }}>New stories every month.</p>
+        <Link to="/guidebook" className="flex items-center gap-2 text-[11px] font-medium tracking-[0.1em] hover:gap-3 transition-all duration-300" style={{ color: '#1A1400' }}>
           SEE GUIDEBOOK <ArrowUpRight size={12} strokeWidth={2} />
         </Link>
       </footer>

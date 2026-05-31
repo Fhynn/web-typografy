@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
+import SplitText from '../components/SplitText'
+import MagneticButton from '../components/MagneticButton'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -142,29 +144,28 @@ export default function BenefitsPage() {
   }, [])
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-[#060606] text-[#F0EDE8]" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div ref={pageRef} className="min-h-screen" style={{ fontFamily: "'Inter', sans-serif", background: '#FFC0CB', color: '#1A0010' }}>
 
       {/* Nav */}
-      <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 sm:px-12 py-6">
-        <Link to="/" className="flex items-center gap-2.5 group" style={{ color: 'rgba(240,237,232,0.45)' }}>
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] sm:w-[85%] max-w-7xl z-50 flex items-center justify-between px-6 py-4 rounded-full liquid-glass transition-all duration-300">
+        <Link to="/" className="flex items-center gap-2.5 group" style={{ color: 'rgba(26,0,16,0.55)' }}>
           <ArrowLeft size={14} strokeWidth={2} className="group-hover:-translate-x-1 transition-transform duration-300" />
           <span className="text-[10px] tracking-[0.18em] font-medium">WANDERFUL</span>
         </Link>
-        <span className="text-[10px] tracking-[0.18em] font-medium" style={{ color: 'rgba(240,237,232,0.25)' }}>WHY US</span>
+        <span className="text-[10px] tracking-[0.18em] font-medium" style={{ color: 'rgba(26,0,16,0.35)' }}>WHY US</span>
       </nav>
 
       {/* ── Hero split ─────────────────────────────────── */}
       <section ref={heroRef} className="min-h-[90vh] grid grid-cols-1 md:grid-cols-2 overflow-hidden">
         {/* Text side */}
         <div className="flex flex-col justify-end px-6 sm:px-12 pt-36 pb-14 md:pb-20">
-          <p data-h className="text-[10px] tracking-[0.22em] font-medium mb-7" style={{ color: 'rgba(240,237,232,0.3)' }}>
+          <p data-h className="text-[10px] tracking-[0.22em] font-medium mb-7" style={{ color: 'rgba(26,0,16,0.4)' }}>
             02 — BENEFITS
           </p>
-          <h1 data-h className="font-light leading-[0.95] tracking-[-0.035em] mb-8" style={{ fontSize: 'clamp(40px, 5.8vw, 86px)' }}>
-            <span className="block">The difference</span>
-            <span className="block" style={{ color: 'rgba(240,237,232,0.28)' }}>you'll actually&nbsp;feel.</span>
-          </h1>
-          <p data-h className="text-[15px] leading-[1.75] max-w-[400px]" style={{ color: 'rgba(240,237,232,0.45)' }}>
+          <SplitText data-h className="font-light leading-[0.95] tracking-[-0.035em] mb-8" style={{ fontSize: 'clamp(40px, 5.8vw, 86px)' }} trigger={false} delay={0.1}>
+            The difference you'll actually feel.
+          </SplitText>
+          <p data-h className="text-[15px] leading-[1.75] max-w-[400px]" style={{ color: 'rgba(26,0,16,0.5)' }}>
             Travel planning is broken. It takes 11 browser tabs to book a simple weekend away.
             We fixed that — quietly, without the fanfare.
           </p>
@@ -179,18 +180,18 @@ export default function BenefitsPage() {
             className="absolute inset-0 w-full object-cover"
             style={{ top: '-10%', height: '120%', willChange: 'transform' }}
           />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(6,6,6,0.55) 0%, rgba(6,6,6,0.0) 60%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(255,192,203,0.55) 0%, rgba(255,192,203,0.0) 60%)' }} />
         </div>
       </section>
 
       {/* ── Pillars ─────────────────────────────────────── */}
-      <div ref={pillarsRef} className="border-t" style={{ borderColor: 'rgba(240,237,232,0.07)' }}>
+      <div ref={pillarsRef} className="border-t" style={{ borderColor: 'rgba(26,0,16,0.12)' }}>
         {PILLARS.map((p) => (
           <div
             key={p.num}
             className="pillar grid grid-cols-1 md:grid-cols-2 border-b"
             data-flip={String(p.flip)}
-            style={{ borderColor: 'rgba(240,237,232,0.07)' }}
+            style={{ borderColor: 'rgba(26,0,16,0.12)' }}
           >
             {/* Photo with parallax container */}
             <div className={`pillar-photo-wrap relative overflow-hidden min-h-[300px] sm:min-h-[480px] opacity-0 ${p.flip ? 'md:order-last' : ''}`}>
@@ -201,18 +202,18 @@ export default function BenefitsPage() {
                 style={{ top: '-10%', height: '120%', willChange: 'transform' }}
                 loading="lazy"
               />
-              <div className="absolute inset-0" style={{ background: 'rgba(6,6,6,0.15)' }} />
+              <div className="absolute inset-0" style={{ background: 'rgba(255,192,203,0.1)' }} />
             </div>
 
             {/* Text */}
             <div className="pillar-text flex flex-col justify-center px-8 sm:px-16 py-14 opacity-0">
-              <span className="text-[10px] tracking-[0.2em] font-medium mb-8 block" style={{ color: 'rgba(240,237,232,0.25)' }}>
+              <span className="text-[10px] tracking-[0.2em] font-medium mb-8 block" style={{ color: 'rgba(26,0,16,0.3)' }}>
                 {p.num}
               </span>
               <h2 className="font-light leading-[1.1] tracking-[-0.025em] mb-6 whitespace-pre-line" style={{ fontSize: 'clamp(28px, 3.5vw, 52px)' }}>
                 {p.title}
               </h2>
-              <p className="text-[14px] sm:text-[15px] leading-[1.8] max-w-[380px]" style={{ color: 'rgba(240,237,232,0.45)' }}>
+              <p className="text-[14px] sm:text-[15px] leading-[1.8] max-w-[380px]" style={{ color: 'rgba(26,0,16,0.5)' }}>
                 {p.body}
               </p>
             </div>
@@ -229,18 +230,18 @@ export default function BenefitsPage() {
           <p className="font-light leading-[1.1] tracking-[-0.025em] mb-3" style={{ fontSize: 'clamp(24px, 3vw, 44px)' }}>
             Ready to travel differently?
           </p>
-          <p style={{ color: 'rgba(240,237,232,0.4)', fontSize: 14 }}>
+          <p style={{ color: 'rgba(26,0,16,0.45)', fontSize: 14 }}>
             Your first itinerary consultation is free and takes 20 minutes.
           </p>
         </div>
-        <Link
-          to="/"
-          className="flex items-center gap-2.5 bg-[#F0EDE8] text-[#060606] rounded-full px-8 py-4 text-[13px] font-medium tracking-[0.06em] hover:bg-white transition-all duration-300 hover:scale-[1.02] whitespace-nowrap"
-          style={{ fontFamily: "'Barlow', sans-serif" }}
+        <MagneticButton
+          to="/plan"
+          className="rounded-full px-8 py-4 text-[13px] font-medium tracking-[0.06em] whitespace-nowrap"
+          style={{ fontFamily: "'Barlow', sans-serif", background: '#1A0010', color: '#FFC0CB' }}
         >
           Plan my escape
           <ArrowUpRight size={14} strokeWidth={2} />
-        </Link>
+        </MagneticButton>
       </section>
     </div>
   )

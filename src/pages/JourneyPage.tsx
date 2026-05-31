@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger)
 const TRIPS = [
   {
     id: '01',
+    slug: 'amalfi-drift',
     title: 'Amalfi Drift',
     sub: 'Italy · Campania',
     duration: '7 nights',
@@ -18,6 +19,7 @@ const TRIPS = [
   },
   {
     id: '02',
+    slug: 'kyoto-layers',
     title: 'Kyoto Layers',
     sub: 'Japan · Kansai',
     duration: '5 nights',
@@ -27,6 +29,7 @@ const TRIPS = [
   },
   {
     id: '03',
+    slug: 'atlas-high',
     title: 'Atlas High',
     sub: 'Morocco · Marrakech',
     duration: '6 nights',
@@ -36,6 +39,7 @@ const TRIPS = [
   },
   {
     id: '04',
+    slug: 'patagonia-edge',
     title: 'Patagonia Edge',
     sub: 'Argentina · Tierra del Fuego',
     duration: '10 nights',
@@ -120,27 +124,27 @@ export default function JourneyPage() {
   }, [])
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-[#060606] text-[#F0EDE8]" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div ref={pageRef} className="min-h-screen" style={{ fontFamily: "'Inter', sans-serif", background: '#FF8243', color: '#1A0800' }}>
 
       {/* ── Nav ─── */}
-      <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 sm:px-12 py-6">
-        <Link to="/" className="flex items-center gap-2.5 group" style={{ color: 'rgba(240,237,232,0.45)' }}>
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] sm:w-[85%] max-w-7xl z-50 flex items-center justify-between px-6 py-4 rounded-full liquid-glass transition-all duration-300">
+        <Link to="/" className="flex items-center gap-2.5 group" style={{ color: 'rgba(26,8,0,0.55)' }}>
           <ArrowLeft size={14} strokeWidth={2} className="group-hover:-translate-x-1 transition-transform duration-300" />
           <span className="text-[10px] tracking-[0.18em] font-medium">WANDERFUL</span>
         </Link>
-        <span className="text-[10px] tracking-[0.18em] font-medium" style={{ color: 'rgba(240,237,232,0.25)' }}>
+        <span className="text-[10px] tracking-[0.18em] font-medium" style={{ color: 'rgba(26,8,0,0.35)' }}>
           THE COLLECTION
         </span>
       </nav>
 
       {/* ── Header ─── */}
       <header ref={headerRef} className="pt-32 sm:pt-40 pb-14 px-6 sm:px-12 max-w-7xl mx-auto">
-        <p data-h className="text-[10px] tracking-[0.22em] font-medium mb-7" style={{ color: 'rgba(240,237,232,0.3)' }}>
+        <p data-h className="text-[10px] tracking-[0.22em] font-medium mb-7" style={{ color: 'rgba(26,8,0,0.4)' }}>
           01 — JOURNEY
         </p>
         <h1 className="font-light leading-[0.95] tracking-[-0.035em]" style={{ fontSize: 'clamp(42px, 6.5vw, 96px)' }}>
           <span data-h className="block">Where will your</span>
-          <span data-h className="block" style={{ color: 'rgba(240,237,232,0.28)' }}>instinct take&nbsp;you?</span>
+          <span data-h className="block" style={{ color: 'rgba(26,8,0,0.35)' }}>instinct take&nbsp;you?</span>
         </h1>
       </header>
 
@@ -160,15 +164,22 @@ export default function JourneyPage() {
       <footer
         ref={footerRef}
         className="border-t px-6 sm:px-12 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 opacity-0"
-        style={{ borderColor: 'rgba(240,237,232,0.07)' }}
+        style={{ borderColor: 'rgba(26,8,0,0.15)' }}
       >
-        <p className="text-[13px]" style={{ color: 'rgba(240,237,232,0.35)' }}>
+        <p className="text-[13px]" style={{ color: 'rgba(26,8,0,0.45)' }}>
           All itineraries are built personally for you — no templates, no repeats.
         </p>
-        <Link to="/" className="flex items-center gap-2 text-[12px] font-medium tracking-[0.1em] hover:gap-3 transition-all duration-300" style={{ color: '#F0EDE8' }}>
-          PLAN MY ESCAPE
-          <ArrowUpRight size={13} strokeWidth={2} />
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link to="/destinations" className="flex items-center gap-2 text-[12px] font-medium tracking-[0.1em] hover:gap-3 transition-all duration-300" style={{ color: '#1A0800' }}>
+            DESTINATIONS <ArrowUpRight size={13} strokeWidth={2} />
+          </Link>
+          <Link to="/experiences" className="flex items-center gap-2 text-[12px] font-medium tracking-[0.1em] hover:gap-3 transition-all duration-300" style={{ color: '#1A0800' }}>
+            EXPERIENCES <ArrowUpRight size={13} strokeWidth={2} />
+          </Link>
+          <Link to="/plan" className="flex items-center gap-2 text-[12px] font-medium tracking-[0.1em] hover:gap-3 transition-all duration-300" style={{ color: '#1A0800' }}>
+            PLAN MY ESCAPE <ArrowUpRight size={13} strokeWidth={2} />
+          </Link>
+        </div>
       </footer>
     </div>
   )
@@ -176,16 +187,35 @@ export default function JourneyPage() {
 
 /* ── TripCard ─────────────────────────────────────────── */
 function TripCard({ trip, className = '' }: { trip: (typeof TRIPS)[0]; className?: string }) {
+  const cardRef = useRef<HTMLAnchorElement>(null)
+
+  const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = cardRef.current
+    if (!el) return
+    const { left, top, width, height } = el.getBoundingClientRect()
+    const x = ((e.clientX - left) / width - 0.5) * 10
+    const y = ((e.clientY - top) / height - 0.5) * -10
+    gsap.to(el, { rotateX: y, rotateY: x, duration: 0.4, ease: 'power2.out', transformPerspective: 900 })
+  }
+
+  const handleLeave = () => {
+    if (cardRef.current) gsap.to(cardRef.current, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' })
+  }
+
   return (
-    <div
-      className={`jcard group relative overflow-hidden rounded-xl cursor-pointer opacity-0 ${className}`}
-      style={{ background: '#0D0D0D' }}
+    <Link
+      ref={cardRef}
+      to={`/journey/${trip.slug}`}
+      className={`jcard group relative overflow-hidden rounded-xl cursor-pointer opacity-0 block ${className}`}
+      style={{ background: 'rgba(26,8,0,0.12)', willChange: 'transform' }}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
     >
       {/* Photo — given extra height so parallax has room */}
       <img
         src={trip.photo}
         alt={trip.photoAlt}
-        className="absolute inset-x-0 w-full object-cover"
+        className="absolute inset-x-0 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
         style={{ top: '-8%', height: '116%', willChange: 'transform' }}
         loading="lazy"
       />
@@ -220,6 +250,6 @@ function TripCard({ trip, className = '' }: { trip: (typeof TRIPS)[0]; className
           EXPLORE TRIP <ArrowUpRight size={12} strokeWidth={2} />
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
