@@ -256,7 +256,7 @@ export default function App() {
 
       {/* Hero bottom block */}
       <div
-        className={`absolute inset-x-0 bottom-16 sm:bottom-14 z-20 flex flex-col items-center gap-4 sm:gap-6 px-6 transition-all duration-1000 delay-300 ${
+        className={`absolute inset-x-0 bottom-28 sm:bottom-32 z-20 flex flex-col items-center gap-4 sm:gap-6 px-6 transition-all duration-1000 delay-300 ${
           bottomVisible
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 translate-y-6'
@@ -306,12 +306,12 @@ export default function App() {
       </div>
       {/* Scroll cue */}
       <div
-        className={`absolute left-1/2 -translate-x-1/2 bottom-5 z-20 flex flex-col items-center gap-2 transition-opacity duration-1000 delay-[700ms] ${
+        className={`absolute left-1/2 -translate-x-1/2 bottom-6 z-20 flex flex-col items-center gap-2.5 transition-opacity duration-1000 delay-[700ms] ${
           bottomVisible ? 'opacity-60' : 'opacity-0'
         }`}
       >
         <span className="text-[9px] tracking-[0.24em] font-medium text-white/70" style={{ fontFamily: "'Barlow', sans-serif" }}>SCROLL</span>
-        <span className="wf-scroll-line block w-px h-8 bg-white/50" />
+        <span className="wf-scroll-line block w-px h-6 bg-white/50" />
       </div>
 
       </section>
