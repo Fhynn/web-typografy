@@ -27,6 +27,7 @@ const ROUTE_COLOR: Record<string, string> = {
   '/gallery':     '#FCE883',
   '/about':       '#069494',
   '/plan':        '#FFC0CB',
+  '/contact':     '#0C0C0C',
 }
 
 export default function PageTransition({ children }: Props) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { prefersReducedMotion } from '../utils/motion'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -37,6 +38,12 @@ export default function SplitText({
 
     const chars = el.querySelectorAll('.split-char')
 
+    // Reduced motion: reveal instantly, no per-character animation.
+    if (prefersReducedMotion()) {
+      gsap.set(chars, { opacity: 1, y: 0, rotateX: 0 })
+      return
+    }
+
     const anim = gsap.fromTo(chars,
       { y, opacity: 0, rotateX: -60 },
       {
@@ -70,11 +77,11 @@ export default function SplitText({
       {words.map((word, wi) => (
         <span key={wi} className="split-word" style={{ display: 'inline-block', overflow: 'hidden' }}>
           {word.split('').map((char, ci) => (
-            <span key={ci} className="split-char" style={{ display: 'inline-block', willChange: 'transform' }}>
+            <span key={ci} className="split-char" style={{ display: 'inline-block', willChange: 'transform', opacity: 0 }}>
               {char}
             </span>
           ))}
-          {wi < words.length - 1 && <span className="split-char" style={{ display: 'inline-block' }}>&nbsp;</span>}
+          {wi < words.length - 1 && <span className="split-char" style={{ display: 'inline-block', opacity: 0 }}>&nbsp;</span>}
         </span>
       ))}
     </Tag>

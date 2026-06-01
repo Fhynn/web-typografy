@@ -16,6 +16,7 @@ const FAINT = 'rgba(26,18,8,0.12)'
 const PLACES = [
   {
     id: '01',
+    slug: 'amalfi-coast',
     name: 'Amalfi Coast',
     country: 'Italy',
     region: 'Mediterranean',
@@ -25,6 +26,7 @@ const PLACES = [
   },
   {
     id: '02',
+    slug: 'kyoto',
     name: 'Kyoto',
     country: 'Japan',
     region: 'East Asia',
@@ -34,6 +36,7 @@ const PLACES = [
   },
   {
     id: '03',
+    slug: 'marrakech',
     name: 'Marrakech',
     country: 'Morocco',
     region: 'North Africa',
@@ -43,6 +46,7 @@ const PLACES = [
   },
   {
     id: '04',
+    slug: 'patagonia',
     name: 'Patagonia',
     country: 'Argentina',
     region: 'South America',
@@ -52,6 +56,7 @@ const PLACES = [
   },
   {
     id: '05',
+    slug: 'lisbon',
     name: 'Lisbon',
     country: 'Portugal',
     region: 'Atlantic Europe',
@@ -61,6 +66,7 @@ const PLACES = [
   },
   {
     id: '06',
+    slug: 'bali',
     name: 'Bali',
     country: 'Indonesia',
     region: 'Southeast Asia',
@@ -238,10 +244,11 @@ export default function DestinationsPage() {
 
 /* ── DestCard ── */
 function DestCard({ place, className = '' }: { place: typeof PLACES[0]; className?: string }) {
-  const cardRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLAnchorElement>(null)
+  const imgRef  = useRef<HTMLImageElement>(null)
 
   /* Hover tilt micro-interaction */
-  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const el = cardRef.current
     if (!el) return
     const { left, top, width, height } = el.getBoundingClientRect()
@@ -249,23 +256,32 @@ function DestCard({ place, className = '' }: { place: typeof PLACES[0]; classNam
     const y = ((e.clientY - top) / height - 0.5) * -8
     gsap.to(el, { rotateX: y, rotateY: x, duration: 0.4, ease: 'power2.out', transformPerspective: 800 })
   }
+  // GSAP-driven zoom so it composes with the parallax 'y' instead of being
+  // overwritten by GSAP's inline transform (a CSS hover class would be).
+  const handleEnter = () => {
+    if (imgRef.current) gsap.to(imgRef.current, { scale: 1.05, duration: 0.7, ease: 'power3.out' })
+  }
   const handleLeave = () => {
     if (cardRef.current)
       gsap.to(cardRef.current, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' })
+    if (imgRef.current) gsap.to(imgRef.current, { scale: 1, duration: 0.7, ease: 'power3.out' })
   }
 
   return (
-    <div
+    <Link
+      to={`/destinations/${place.slug}`}
       ref={cardRef}
-      className={`dest-card group relative overflow-hidden rounded-2xl cursor-pointer opacity-0 ${className}`}
+      className={`dest-card group relative block overflow-hidden rounded-2xl cursor-pointer opacity-0 ${className}`}
       style={{ background: 'rgba(26,18,8,0.08)', willChange: 'transform' }}
       onMouseMove={handleMove}
+      onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
     >
       <img
+        ref={imgRef}
         src={place.photo}
         alt={place.name}
-        className="absolute inset-x-0 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+        className="absolute inset-x-0 w-full object-cover"
         style={{ top: '-8%', height: '116%', willChange: 'transform' }}
         loading="lazy"
       />
@@ -302,6 +318,6 @@ function DestCard({ place, className = '' }: { place: typeof PLACES[0]; classNam
           EXPLORE <ArrowUpRight size={10} strokeWidth={2} />
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

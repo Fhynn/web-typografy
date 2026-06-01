@@ -188,6 +188,7 @@ export default function JourneyPage() {
 /* ── TripCard ─────────────────────────────────────────── */
 function TripCard({ trip, className = '' }: { trip: (typeof TRIPS)[0]; className?: string }) {
   const cardRef = useRef<HTMLAnchorElement>(null)
+  const imgRef  = useRef<HTMLImageElement>(null)
 
   const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const el = cardRef.current
@@ -198,8 +199,14 @@ function TripCard({ trip, className = '' }: { trip: (typeof TRIPS)[0]; className
     gsap.to(el, { rotateX: y, rotateY: x, duration: 0.4, ease: 'power2.out', transformPerspective: 900 })
   }
 
+  // Zoom is driven through GSAP (not a CSS class) so it composes with the
+  // scroll-parallax 'y' on the same image instead of being overwritten by it.
+  const handleEnter = () => {
+    if (imgRef.current) gsap.to(imgRef.current, { scale: 1.05, duration: 0.7, ease: 'power3.out' })
+  }
   const handleLeave = () => {
     if (cardRef.current) gsap.to(cardRef.current, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' })
+    if (imgRef.current) gsap.to(imgRef.current, { scale: 1, duration: 0.7, ease: 'power3.out' })
   }
 
   return (
@@ -209,13 +216,15 @@ function TripCard({ trip, className = '' }: { trip: (typeof TRIPS)[0]; className
       className={`jcard group relative overflow-hidden rounded-xl cursor-pointer opacity-0 block ${className}`}
       style={{ background: 'rgba(26,8,0,0.12)', willChange: 'transform' }}
       onMouseMove={handleMove}
+      onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
     >
       {/* Photo — given extra height so parallax has room */}
       <img
+        ref={imgRef}
         src={trip.photo}
         alt={trip.photoAlt}
-        className="absolute inset-x-0 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+        className="absolute inset-x-0 w-full object-cover"
         style={{ top: '-8%', height: '116%', willChange: 'transform' }}
         loading="lazy"
       />

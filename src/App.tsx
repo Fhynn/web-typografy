@@ -4,6 +4,8 @@ import gsap from 'gsap'
 import { Lock, Menu, X } from 'lucide-react'
 import SplitText from './components/SplitText'
 import MagneticButton from './components/MagneticButton'
+import HomeScroll from './sections/HomeScroll'
+import { prefersReducedMotion } from './utils/motion'
 import './index.css'
 
 /* ─────────────────────────────────────────────────── */
@@ -17,6 +19,7 @@ const NAV_LINKS = [
   { label: 'JOURNAL',   path: '/journal'  },
   { label: 'GUIDEBOOK', path: '/guidebook'},
   { label: 'ABOUT',     path: '/about'    },
+  { label: 'CONTACT',   path: '/contact'  },
 ] as const
 
 
@@ -36,13 +39,32 @@ export default function App() {
   /* Mobile menu state */
   const [menuOpen, setMenuOpen] = useState(false)
 
-  /* ── Fade in on mount ─────────────────────────── */
+  /* ── Fade in — synced to the preloader curtain lift ─── */
   useEffect(() => {
-    const t1 = setTimeout(() => setHeroVisible(true), 80)
-    const t2 = setTimeout(() => setBottomVisible(true), 300 + 80)
+    let t1: ReturnType<typeof setTimeout>
+    let t2: ReturnType<typeof setTimeout>
+
+    const reveal = () => {
+      t1 = setTimeout(() => setHeroVisible(true), 80)
+      t2 = setTimeout(() => setBottomVisible(true), 380)
+    }
+
+    // If the preloader is skipped (already ran this session, or reduced motion)
+    // it won't fire 'wf:loaded', so reveal straight away; otherwise wait for
+    // the curtain to lift so the entrance isn't wasted behind the overlay.
+    const skipPreloader =
+      typeof window !== 'undefined' &&
+      (sessionStorage.getItem('wf_preloaded') === '1' || prefersReducedMotion())
+    if (skipPreloader) {
+      reveal()
+    } else {
+      window.addEventListener('wf:loaded', reveal, { once: true })
+    }
+
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
+      window.removeEventListener('wf:loaded', reveal)
     }
   }, [])
 
@@ -201,10 +223,13 @@ export default function App() {
       </div>
 
       {/* ══════════════════════════════════════════ */}
-      {/*  HERO HEADLINE  (z-20)                    */}
+      {/*  HERO SECTION  (full viewport, z-10)      */}
       {/* ══════════════════════════════════════════ */}
+      <section className="relative z-10 h-screen w-full">
+
+      {/* Hero headline */}
       <div
-        className="fixed inset-x-0 z-20 flex flex-col items-center text-center px-6"
+        className="absolute inset-x-0 z-20 flex flex-col items-center text-center px-6"
         style={{ top: 'clamp(90px, 14vh, 140px)' }}
       >
         <div
@@ -229,11 +254,9 @@ export default function App() {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════ */}
-      {/*  BOTTOM BLOCK  (z-20)                     */}
-      {/* ══════════════════════════════════════════ */}
+      {/* Hero bottom block */}
       <div
-        className={`fixed inset-x-0 bottom-8 sm:bottom-14 z-20 flex flex-col items-center gap-4 sm:gap-6 px-6 transition-all duration-1000 delay-300 ${
+        className={`absolute inset-x-0 bottom-16 sm:bottom-14 z-20 flex flex-col items-center gap-4 sm:gap-6 px-6 transition-all duration-1000 delay-300 ${
           bottomVisible
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 translate-y-6'
@@ -281,19 +304,22 @@ export default function App() {
           </span>
         </div>
       </div>
-      {/* Creator Credits */}
-      <div className={`fixed bottom-6 right-6 sm:bottom-8 sm:right-10 z-50 flex flex-col sm:flex-row items-end sm:items-center gap-3 sm:gap-6 transition-all duration-1000 delay-[600ms] ${
-          bottomVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-        }`}>
-        <a href="https://instagram.com/fhinz_anxiety" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white/50 hover:text-white transition-colors duration-300">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          <span className="text-[10px] tracking-[0.1em] font-medium" style={{ fontFamily: "'Barlow', sans-serif" }}>@fhinz_anxiety</span>
-        </a>
-        <a href="https://github.com/Fhynn" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white/50 hover:text-white transition-colors duration-300">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-          <span className="text-[10px] tracking-[0.1em] font-medium" style={{ fontFamily: "'Barlow', sans-serif" }}>Fhynn</span>
-        </a>
+      {/* Scroll cue */}
+      <div
+        className={`absolute left-1/2 -translate-x-1/2 bottom-5 z-20 flex flex-col items-center gap-2 transition-opacity duration-1000 delay-[700ms] ${
+          bottomVisible ? 'opacity-60' : 'opacity-0'
+        }`}
+      >
+        <span className="text-[9px] tracking-[0.24em] font-medium text-white/70" style={{ fontFamily: "'Barlow', sans-serif" }}>SCROLL</span>
+        <span className="wf-scroll-line block w-px h-8 bg-white/50" />
       </div>
+
+      </section>
+
+      {/* ══════════════════════════════════════════ */}
+      {/*  SCROLLABLE CONTENT                        */}
+      {/* ══════════════════════════════════════════ */}
+      <HomeScroll />
     </div>
   )
 }

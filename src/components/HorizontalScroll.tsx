@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { prefersReducedMotion } from '../utils/motion'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -21,8 +22,13 @@ export default function HorizontalScroll({
 }) {
   const sectionRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
+  const reduce = prefersReducedMotion()
 
   useEffect(() => {
+    // Reduced motion: no pin / scroll-jacking. The track becomes a normal
+    // horizontally-scrollable strip (below) so every panel stays reachable.
+    if (reduce) return
+
     const section = sectionRef.current
     const track = trackRef.current
     if (!section || !track) return
@@ -44,11 +50,20 @@ export default function HorizontalScroll({
     }, section)
 
     return () => ctx.revert()
-  }, [])
+  }, [reduce])
 
   return (
-    <div ref={sectionRef} className={`horizontal-section ${className}`} style={{ background: bgColor, overflow: 'hidden' }}>
-      <div ref={trackRef} className="horizontal-track flex">
+    <div
+      ref={sectionRef}
+      className={`horizontal-section ${className}`}
+      style={{
+        background: bgColor,
+        overflowX: reduce ? 'auto' : 'hidden',
+        overflowY: 'hidden',
+        WebkitOverflowScrolling: 'touch',
+      }}
+    >
+      <div ref={trackRef} className="horizontal-track flex" style={reduce ? { paddingBottom: 4 } : undefined}>
         {Array.isArray(children) && children.map((child, i) => (
           <div key={i} className={`horizontal-panel shrink-0 ${panelClassName}`}>
             {child}
